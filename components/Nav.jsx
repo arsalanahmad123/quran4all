@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { IoHome as HomeIcon } from 'react-icons/io5'
@@ -11,28 +11,30 @@ import { PiStudentBold as StudentIcon } from 'react-icons/pi'
 import { AiOutlineSchedule as ScheduleIcon } from 'react-icons/ai'
 import { MdVideoLibrary as TutorialIcon } from 'react-icons/md'
 
+import { useAuth } from '@/context/authcontext'
+
 const Nav = () => {
     const currentPath = usePathname()
-    let admin = true
+    const { handleLogout, isAdmin } = useAuth()
 
     const links = [
         {
             name: 'Dashboard',
             path: '/dashboard',
         },
-        admin
+        isAdmin
             ? {
                   name: 'Teachers',
                   path: '/dashboard/teachers',
               }
             : null,
-        admin
+        isAdmin
             ? {
                   name: 'Students',
                   path: '/dashboard/students',
               }
             : null,
-        admin
+        isAdmin
             ? {
                   name: 'Schedule Class',
                   path: '/dashboard/schedule-class',
@@ -54,21 +56,21 @@ const Nav = () => {
             path: '/dashboard',
             icon: HomeIcon,
         },
-        admin
+        isAdmin
             ? {
                   name: 'Teachers',
                   path: '/dashboard/teachers',
                   icon: TeachersIcon,
               }
             : null,
-        admin
+        isAdmin
             ? {
                   name: 'Students',
                   path: '/dashboard/students',
                   icon: StudentIcon,
               }
             : null,
-        admin
+        isAdmin
             ? {
                   name: 'Schedule Class',
                   path: '/dashboard/schedule-class',
@@ -147,7 +149,10 @@ const Nav = () => {
                         })}
                     </ul>
 
-                    <button className='p-2 w-full font-bold text-center rounded-md tracking-widest bg-red-500 text-white'>
+                    <button
+                        className='p-2 w-full font-bold text-center rounded-md tracking-widest bg-red-500 text-white'
+                        onClick={() => handleLogout()}
+                    >
                         Log Out
                     </button>
                 </div>

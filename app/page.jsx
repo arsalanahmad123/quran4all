@@ -1,15 +1,16 @@
 'use client'
-import React from 'react'
-import Link from 'next/link'
+import { useState, useEffect } from 'react'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
-import isAuth from '@/components/isAuth'
 import axios from 'axios'
 import toast from 'react-hot-toast'
+import { useAuth } from '@/context/authcontext'
+import { redirect } from 'next/navigation'
 
 const Login = () => {
-    const [showPassword, setShowPassword] = React.useState(false)
-    const [email, setEmail] = React.useState('')
-    const [password, setPassword] = React.useState('')
+    const [showPassword, setShowPassword] = useState(false)
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const { isLoggedIn, setIsLoggedIn, handleLogin } = useAuth()
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -30,12 +31,22 @@ const Login = () => {
                 data,
                 config,
             )
-            console.log(res)
+
+            if (res.status === 200) {
+                toast.success('Login Successful')
+                handleLogin(res.data.user, res.data.token)
+                redirect('/dashboard')
+            }
         } catch (err) {
             console.log(err)
-            toast.error(err.response.data.error)
         }
     }
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            redirect('/dashboard')
+        }
+    }, [isLoggedIn])
 
     return (
         <div className='flex justify-center items-center h-screen mx-2 lg:mx-0'>
@@ -93,4 +104,4 @@ const Login = () => {
     )
 }
 
-export default isAuth(Login)
+export default Login

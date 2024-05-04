@@ -2,16 +2,16 @@
 
 import { useEffect } from 'react'
 import { redirect } from 'next/navigation'
+import { useAuth } from '@/context/authcontext'
 
 export default function isAuth(Component) {
     return function (props) {
-        let session = false
-
+        const { isAdmin, isLoggedIn } = useAuth()
         useEffect(() => {
-            if (session) {
+            if (!isAdmin && isLoggedIn) {
                 redirect('/dashboard')
             }
-        })
+        }, [])
 
         return <Component {...props} />
     }
