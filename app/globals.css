@@ -21,3 +21,9 @@ body {
         text-wrap: balance;
     }
 }
+
+.overthrough {
+    text-decoration: line-through;
+    opacity: 0.5;
+    cursor: not-allowed;
+}

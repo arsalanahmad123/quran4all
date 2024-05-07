@@ -3,7 +3,7 @@ import React from 'react'
 import Link from 'next/link'
 import { FaPencilAlt } from 'react-icons/fa'
 import { MdDelete } from 'react-icons/md'
-import isAuth from '@/components/isAuth'
+import IsAuth from '@/components/isAuth'
 import { getAdminApi } from '@/axiosroute/adminapi'
 import toast from 'react-hot-toast'
 import { useAuth } from '@/context/authcontext'
@@ -38,52 +38,54 @@ const Teachers = () => {
     }
 
     return (
-        <div className='w-full p-5 flex flex-col justify-start items-start gap-y-5'>
-            <div className='flex flex-row justify-between items-center w-full'>
-                <h4 className='text-2xl font-bold'>Teachers</h4>
-                <Link
-                    href={'/dashboard/teachers/new'}
-                    className='bg-primary text-white px-5 py-1 uppercase'
-                >
-                    Add
-                </Link>
-            </div>
-            <div className='overflow-x-auto w-full  rounded-md'>
-                <table className='table w-full'>
-                    <thead>
-                        <tr className='bg-base-200'>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {teachers?.map((teacher, i) => (
-                            <tr key={i}>
-                                <td>{teacher.fullname}</td>
-                                <td>{teacher.email}</td>
-                                <td>{teacher.phone}</td>
-                                <td className='flex flex-row justify-start items-center gap-x-5'>
-                                    <Link
-                                        href={`/dashboard/teachers/edit/${teacher._id}`}
-                                    >
-                                        <FaPencilAlt className='text-lg text-primary ' />
-                                    </Link>
-                                    <MdDelete
-                                        className='text-lg text-red-600 cursor-pointer'
-                                        onClick={() =>
-                                            deleteTeacher(teacher._id)
-                                        }
-                                    />
-                                </td>
+        <IsAuth>
+            <div className='w-full p-5 flex flex-col justify-start items-start gap-y-5'>
+                <div className='flex flex-row justify-between items-center w-full'>
+                    <h4 className='text-2xl font-bold'>Teachers</h4>
+                    <Link
+                        href={'/dashboard/teachers/new'}
+                        className='bg-primary text-white px-5 py-1 uppercase'
+                    >
+                        Add
+                    </Link>
+                </div>
+                <div className='overflow-x-auto w-full  rounded-md'>
+                    <table className='table w-full'>
+                        <thead>
+                            <tr className='bg-base-200'>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Action</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {teachers?.map((teacher, i) => (
+                                <tr key={i}>
+                                    <td>{teacher.fullname}</td>
+                                    <td>{teacher.email}</td>
+                                    <td>{teacher.phone}</td>
+                                    <td className='flex flex-row justify-start items-center gap-x-5'>
+                                        <Link
+                                            href={`/dashboard/teachers/edit/${teacher._id}`}
+                                        >
+                                            <FaPencilAlt className='text-lg text-primary ' />
+                                        </Link>
+                                        <MdDelete
+                                            className='text-lg text-red-600 cursor-pointer'
+                                            onClick={() =>
+                                                deleteTeacher(teacher._id)
+                                            }
+                                        />
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+        </IsAuth>
     )
 }
 
-export default isAuth(Teachers)
+export default Teachers
