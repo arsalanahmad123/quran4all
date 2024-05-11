@@ -4,18 +4,17 @@ import { useAuth } from '@/context/authcontext'
 import { getAdminApi } from '@/axiosroute/adminapi'
 import toast from 'react-hot-toast'
 
-const page = () => {
+const Page = () => {
     const { isAdmin, isLoggedIn, user } = useAuth()
     const adminapi = getAdminApi()
-    const [classes, setClasses] = useState(null)
+    const [classes, setClasses] = useState([])
     const [totalTeachers, setTotalTeachers] = useState(0)
     const [totalStudents, setTotalStudents] = useState(0)
 
-    const getClasses = async () => {
+    const fetchClasses = async () => {
         try {
-            const response = await adminapi.get('/api/class', {
-                cache: 'no-store',
-            })
+            const endpoint = isAdmin ? '/api/class' : `/api/class/${user._id}`
+            const response = await adminapi.get(endpoint, { cache: 'no-store' })
             if (response.status === 200) {
                 setClasses(response.data.classes)
             }
@@ -25,7 +24,7 @@ const page = () => {
         }
     }
 
-    const getCounts = async () => {
+    const fetchCounts = async () => {
         try {
             const response = await adminapi.get('/api/auth/total', {
                 cache: 'no-store',
@@ -39,32 +38,6 @@ const page = () => {
         }
     }
 
-    useEffect(() => {
-        if (isAdmin) {
-            getClasses()
-            getCounts()
-        } else {
-            const getClasses = async () => {
-                try {
-                    const response = await adminapi.get(
-                        `/api/class/${user._id}`,
-                        {
-                            cache: 'no-store',
-                        },
-                    )
-                    if (response.status === 200) {
-                        setClasses(response.data.classes)
-                    }
-                } catch (error) {
-                    console.error(error)
-                    toast.error(error.response.data.msg)
-                }
-            }
-
-            getClasses()
-        }
-    }, [])
-
     const openClass = async (link, class_id) => {
         try {
             if (user.role === 'teacher') {
@@ -76,6 +49,7 @@ const page = () => {
                 if (response.status === 200) {
                     window.open(link, '_blank')
                     toast.success('Class opened successfully after updation')
+                    window.location.reload()
                 }
             } else {
                 window.open(link, '_blank')
@@ -85,6 +59,15 @@ const page = () => {
             console.log(error)
         }
     }
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            fetchClasses()
+        }
+        if (isAdmin) {
+            fetchCounts()
+        }
+    }, [isLoggedIn, isAdmin])
 
     return (
         <div className='h-screen w-full flex justify-start items-start md:p-5 px-2 mt-5 md:mt-0 flex-col overflow-auto'>
@@ -108,7 +91,7 @@ const page = () => {
                     </div>
                 </div>
             )}
-            {isLoggedIn && classes?.length > 0 && (
+            {isLoggedIn && classes.length > 0 && (
                 <div className='flex flex-col justify-start items-start gap-x-3 w-full h-screen gap-y-5 mt-4'>
                     <h4 className='text-2xl font-bold'>Today Schedule</h4>
                     <div className='overflow-x-auto w-full  rounded-md'>
@@ -122,7 +105,7 @@ const page = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {classes?.map((item, i) => (
+                                {classes.map((item, i) => (
                                     <tr
                                         key={i}
                                         className={` ${
@@ -138,7 +121,6 @@ const page = () => {
                                         </td>
                                         <td>{item.country}</td>
                                         <td>{item.teacher.fullname}</td>
-
                                         <td>
                                             <button
                                                 className='text-primary text-sm hover:bg-gray-300 bg-gray-200 rounded-md font-bold btn btn-xs'
@@ -164,7 +146,7 @@ const page = () => {
                     </div>
                 </div>
             )}
-            {classes?.length === 0 && (
+            {classes.length === 0 && (
                 <span className='text-gray-900 font-semibold text-2xl mt-5'>
                     No classes today 🙃
                 </span>
@@ -173,4 +155,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page

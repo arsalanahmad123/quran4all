@@ -5,12 +5,15 @@ import IsAuth from '@/components/isAuth'
 import { getAdminApi } from '@/axiosroute/adminapi'
 import toast from 'react-hot-toast'
 import { useAuth } from '@/context/authcontext'
+import { useRouter } from 'next/navigation'
 
 const EditTeacher = ({ params }) => {
     const [teacherData, setTeacherData] = useState(null)
     const [showPassword, setShowPassword] = useState(false)
     const { isAdmin } = useAuth()
     const adminapi = getAdminApi()
+
+    const router = useRouter()
     useEffect(() => {
         const getTeacher = async () => {
             try {
@@ -64,7 +67,7 @@ const EditTeacher = ({ params }) => {
             )
             if (response.status === 200) {
                 toast.success('Teacher updated successfully')
-                window.location.href = '/dashboard/teachers'
+                router.push('/dashboard/teachers')
             }
         } catch (error) {
             console.log(error)

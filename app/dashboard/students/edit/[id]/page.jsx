@@ -4,10 +4,11 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import IsAuth from '@/components/isAuth'
 import { getAdminApi } from '@/axiosroute/adminapi'
 import toast from 'react-hot-toast'
+import { useRouter } from 'next/navigation'
 const EditStudent = ({ params }) => {
     const [studentData, setStudentData] = useState(null)
     const [showPassword, setShowPassword] = useState(false)
-
+    const router = useRouter()
     const adminapi = getAdminApi()
     useEffect(() => {
         const getStudent = async () => {
@@ -63,7 +64,7 @@ const EditStudent = ({ params }) => {
             )
             if (response.status === 200) {
                 toast.success('Student updated successfully')
-                window.location.href = '/dashboard/students'
+                router.push('/dashboard/students')
             }
         } catch (error) {
             console.log(error)

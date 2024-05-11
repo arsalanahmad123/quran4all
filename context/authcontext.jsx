@@ -1,16 +1,7 @@
 'use client'
 import { createContext, useContext, useState, useEffect } from 'react'
 
-const authContext = createContext({
-    user: null,
-    setUser: (user) => {},
-    isLoggedIn: false,
-    setIsLoggedIn: (isLoggedIn) => {},
-    token: null,
-    setToken: (token) => {},
-    isAdmin: false,
-    setIsAdmin: (isAdmin) => {},
-})
+const authContext = createContext()
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)

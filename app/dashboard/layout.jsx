@@ -4,14 +4,14 @@ import { FaWhatsapp } from 'react-icons/fa'
 import { useEffect } from 'react'
 
 import { useAuth } from '@/context/authcontext'
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 export default function MainLayout({ children }) {
     const { isLoggedIn } = useAuth()
-
+    const router = useRouter()
     useEffect(() => {
         if (!isLoggedIn) {
-            redirect('/')
+            router.push('/')
         }
     }, [isLoggedIn])
 

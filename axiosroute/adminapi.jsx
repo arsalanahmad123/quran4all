@@ -6,7 +6,7 @@ export const getAdminApi = () => {
     const token = authData?.token
     const id = authData?.user?._id
     return axios.create({
-        baseURL: 'http://localhost:8000',
+        baseURL: 'https://quran4allbackend.vercel.app',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,

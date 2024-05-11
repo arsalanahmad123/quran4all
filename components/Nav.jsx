@@ -12,6 +12,8 @@ import { AiOutlineSchedule as ScheduleIcon } from 'react-icons/ai'
 import { MdVideoLibrary as TutorialIcon } from 'react-icons/md'
 
 import { useAuth } from '@/context/authcontext'
+import logo from '@/public/logo.png'
+import Image from 'next/image'
 
 const Nav = () => {
     const currentPath = usePathname()
@@ -103,7 +105,7 @@ const Nav = () => {
             {/* // Medium Screens  */}
             <nav className='bg-primary p-2 md:flex flex-row justify-between items-center lg:hidden hidden'>
                 <div>
-                    <h1 className='text-lg text-white'>QURAN FOR ALL </h1>
+                    <Image src={logo} alt='logo' width={50} height={50} />
                 </div>
                 <div className=''>
                     <ul className='flex flex-row justify-normal items-center gap-x-2'>
@@ -112,7 +114,7 @@ const Nav = () => {
                                 <Link
                                     key={link.name}
                                     href={link.path}
-                                    className={`p-1 text-sm text-left rounded-md  ${
+                                    className={`p-1 text-sm text-left rounded-md hover:bg-white hover:text-primary  ${
                                         isActive(link.path)
                                             ? 'bg-white text-primary'
                                             : 'text-white'
@@ -122,15 +124,20 @@ const Nav = () => {
                                 </Link>
                             )
                         })}
+                        <button
+                            className='btn bg-red-500 text-white btn-xs hover:bg-red-600 border-none'
+                            onClick={() => handleLogout()}
+                        >
+                            Log out
+                        </button>
                     </ul>
                 </div>
             </nav>
             {/* Large Screens  */}
             <nav className='bg-primary min-h-screen p-4 w-[20%] hidden lg:block rounded-tr-lg rounded-br-lg fixed top-0 left-0'>
                 <div className='flex flex-col justify-start items-center py-10 gap-y-10'>
-                    <h4 className='text-white font-extrabold text-2xl tracking-wider'>
-                        QURAN FOR ALL
-                    </h4>
+                    <Image src={logo} alt='logo' width={100} height={100} />
+
                     <ul className='flex flex-col justify-center items-start gap-y-2 w-full mt-8'>
                         {links.map((link) => {
                             return (
@@ -160,13 +167,13 @@ const Nav = () => {
 
             {/* Small Screens  */}
             <nav className='bg-primary p-2 fixed bottom-0 left-0 w-full md:hidden lg:hidden '>
-                <ul className='flex flex-row justify-between items-center gap-x-2'>
+                <ul className='flex flex-row justify-between items-center gap-x-2 flex-wrap gap-y-2'>
                     {icons.map((link) => {
                         return (
                             <Link
                                 key={link.name}
                                 href={link.path}
-                                className={`text-lg p-4 text-left rounded-md  ${
+                                className={`text-lg p-4 text-left rounded-md hover:bg-white hover:text-primary ${
                                     isActive(link.path)
                                         ? 'bg-white text-primary'
                                         : 'text-white'
@@ -176,6 +183,9 @@ const Nav = () => {
                             </Link>
                         )
                     })}
+                    <button className='btn bg-red-500 text-white btn-xs hover:bg-red-600 border-none'>
+                        Log out
+                    </button>
                 </ul>
             </nav>
         </>

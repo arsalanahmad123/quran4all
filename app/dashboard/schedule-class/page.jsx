@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import IsAuth from '@/components/isAuth'
 import { getAdminApi } from '@/axiosroute/adminapi'
 import toast from 'react-hot-toast'
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 const page = () => {
     const [students, setStudents] = useState(null)
     const [teachers, setTeachers] = useState(null)
@@ -16,7 +16,7 @@ const page = () => {
     const [link, setLink] = useState(null)
 
     const adminapi = getAdminApi()
-
+    const router = useRouter()
     const getTeachers = async () => {
         try {
             const response = await adminapi.get('/api/teacher')
@@ -87,6 +87,7 @@ const page = () => {
             const response = await adminapi.post('/api/class', data)
             if (response.status === 201) {
                 toast.success('Class scheduled successfully')
+                router.push('/dashboard')
             }
         } catch (error) {
             console.log(error)

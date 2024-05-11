@@ -4,16 +4,20 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { useAuth } from '@/context/authcontext'
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
-const Login = () => {
+const page = () => {
     const [showPassword, setShowPassword] = useState(false)
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const { isLoggedIn, setIsLoggedIn, handleLogin } = useAuth()
+    const [loading, setLoading] = useState(false)
+    const { isLoggedIn, handleLogin } = useAuth()
 
+    const router = useRouter()
     const handleSubmit = async (e) => {
         e.preventDefault()
+
+        setLoading(true)
 
         const data = {
             email,
@@ -27,7 +31,7 @@ const Login = () => {
 
         try {
             const res = await axios.post(
-                'http://localhost:8000/api/auth/login',
+                'https://quran4allbackend.vercel.app/api/auth/login',
                 data,
                 config,
             )
@@ -35,16 +39,19 @@ const Login = () => {
             if (res.status === 200) {
                 toast.success('Login Successful')
                 handleLogin(res.data.user, res.data.token)
-                redirect('/dashboard')
+
+                setLoading(false)
+                router.push('/dashboard')
             }
         } catch (err) {
             console.log(err)
+            setLoading(false)
         }
     }
 
     useEffect(() => {
         if (isLoggedIn) {
-            redirect('/dashboard')
+            router.push('/dashboard')
         }
     }, [isLoggedIn])
 
@@ -96,12 +103,13 @@ const Login = () => {
                 <button
                     className='mt-4 bg-primary text-white p-2 rounded-md w-full text-center'
                     onClick={(e) => handleSubmit(e)}
+                    disabled={loading ? true : false}
                 >
-                    Login
+                    {loading ? 'Loading...' : 'Login'}
                 </button>
             </div>
         </div>
     )
 }
 
-export default Login
+export default page
